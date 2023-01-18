@@ -22,10 +22,13 @@ spec:
         env:
          - name: ZIPKIN
            value: http://zipkin.jaeger.svc.cluster.local:9411/api/v1/spans
+        command: ["/app"]
+        args:
+        - -port=80
         resources:
           limits:
-            cpu: 100m
-            memory: 100Mi
+            cpu: 200m
+            memory: 200Mi
           requests:
             cpu: 100m
             memory: 100Mi
@@ -53,4 +56,4 @@ spec:
           initialDelaySeconds: 180
           periodSeconds: 3
       nodeSelector:
-        beta.kubernetes.io/os: linux
+        kubernetes.io/os: linux

@@ -10,8 +10,8 @@ spec:
   clusterIP: None
   ports:
   - name: http
-    port: 9100
-    targetPort: 9100
+    port: 9101
+    targetPort: 9101
   selector:
     app.kubernetes.io/component: exporter
     app.kubernetes.io/name: node-exporter

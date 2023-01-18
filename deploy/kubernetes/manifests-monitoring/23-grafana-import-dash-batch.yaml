@@ -14,7 +14,7 @@ spec:
         app: grafana
         component: import-dashboards
       annotations:
-        pod.beta.kubernetes.io/init-containers: '[
+        pod.kubernetes.io/init-containers: '[
           {
             "name": "wait-for-endpoints",
             "image": "giantswarm/tiny-tools",
