@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-service
+  namespace: sock-shop
+spec:
+  selector:
+    app: test-service
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-service
+  namespace: sock-shop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-service
+  template:
+    metadata:
+      labels:
+        app: test-service
+    spec:
+      containers:
+        - name: test-service
+          image: alpine:latest
+          command:
+            - "sh"
+          args:
+            - "-c"
+            - |
+              apk add --no-cache apache2 
+              echo "echo -n $(date)" > /usr/local/bin/run.sh
+              chmod +x /usr/local/bin/run.sh
+              httpd -f -p 8080
+          ports:
+            - containerPort: 8080

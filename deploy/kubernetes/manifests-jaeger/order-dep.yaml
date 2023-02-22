@@ -18,17 +18,19 @@ spec:
     spec:
       containers:
       - name: orders
-        image: weaveworksdemos/orders:0.4.7
+        image: janobre/sock-shop-orders-ms:v0.2.6 #weaveworksdemos/orders:0.4.7  
         env:
          - name: JAVA_OPTS
-           value: -Xms64m -Xmx128m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=true
+           value: -Xms256m -Xmx1024m -XX:+UseG1GC -Djava.security.egd=file:/dev/urandom -Dspring.zipkin.enabled=false
+         - name: ZIPKIN
+           value: http://zipkin.jaeger.svc.cluster.local:9411/api/v1/spans
         resources:
           limits:
             cpu: 500m
-            memory: 500Mi
+            memory: 2048Mi
           requests:
-            cpu: 100m
-            memory: 300Mi
+            cpu: 500m
+            memory: 1024Mi
         ports:
         - containerPort: 80
         securityContext:

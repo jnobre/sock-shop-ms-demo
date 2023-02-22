@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: network-status-checker
+  namespace: sock-shop
+spec:
+  selector:
+    matchLabels:
+      app: network-status-checker
+  template:
+    metadata:
+      labels:
+        app: network-status-checker
+    spec:
+      containers:
+      - name: network-status-checker
+        image: alpine:3.12
+        command:
+        - "/bin/sh"
+        - "-c"
+        - |
+          while true; do
+            if ping -c1 google.com &> /dev/null; then
+              echo "Network is up"
+            else
+              echo "Network is down"
+            fi
+            sleep 5
+          done

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: network-anomaly-injector
+  namespace: sock-shop
+spec:
+  selector:
+    matchLabels:
+      app: network-anomaly-injector
+  template:
+    metadata:
+      labels:
+        app: network-anomaly-injector
+    spec:
+      containers:
+        - name: network-anomaly-injector
+          image: alpine:latest
+          command:
+            - "sh"
+          args:
+            - "-c"
+            - |
+              apk add --no-cache iptables
+              iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP
+              sleep infinity
+          securityContext:
+            privileged: true
+      hostNetwork: true

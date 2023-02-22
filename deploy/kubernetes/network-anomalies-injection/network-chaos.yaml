@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: network-anomaly-injector
+spec:
+  selector:
+    matchLabels:
+      app: network-anomaly-injector
+  template:
+    metadata:
+      labels:
+        app: network-anomaly-injector
+    spec:
+      containers:
+        - name: network-anomaly-injector
+          image: docker.io/jimmidyson/network-chaos:latest
+          command:
+            - /network-chaos
+          args:
+            - "--latency=100ms"
+            - "--corrupt=0.1"
+            - "--loss=0.1"
+          securityContext:
+            privileged: true
+          env:
+            - name: HOST_NETWORK
+              value: "true"
+      hostNetwork: true

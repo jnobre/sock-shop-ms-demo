@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: network-anomaly-injector
+  namespace: sock-shop
+spec:
+  selector:
+    matchLabels:
+      app: network-anomaly-injector
+  template:
+    metadata:
+      labels:
+        app: network-anomaly-injector
+    spec:
+      containers:
+        - name: network-anomaly-injector
+          image: alpine:latest
+          command:
+            - "sh"
+          args:
+            - "-c"
+            - |
+              apk add --no-cache iproute2
+              tc qdisc add dev ens18 root netem delay 50ms 10ms distribution normal loss 10%
+              sleep infinity
+          securityContext:
+            privileged: true
+          env:
+            - name: HOST_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+      hostNetwork: true
+
+
+# sudo tc qdisc del dev ens18 root netem
